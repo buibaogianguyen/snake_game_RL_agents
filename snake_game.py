@@ -17,8 +17,18 @@ RIGHT = 1
 DOWN = 2
 LEFT = 3
 
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+
 class SnakeGame:
-    def __init__(self):
+    def __init__(self, render=True):
+        self.render = render
+        if self.render:
+            self.screen = pygame.display.set_mode((GRID_WIDTH, GRID_HEIGHT))
+            pygame.display.set_caption('Snake Dreamer')
+            self.clock = pygame.time.Clock()
         self.reset()
 
     def reset(self):
@@ -26,6 +36,8 @@ class SnakeGame:
         self.score = 0
         self.direction = RIGHT
         self.food = self._place_food()
+        
+        return self._get_state()
 
     def _place_food(self):
         while True:
@@ -95,3 +107,25 @@ class SnakeGame:
         self.snake.insert(0, new_head)
 
         reward = -0.01
+
+        game_over = False
+
+        if new_head == self.food:
+            self.score += 1
+            reward += 1 + 0.1 * len(self.snake) # better reward the longer the snake
+            self.food = self._place_food()
+        else:
+            self.snake.pop()
+        
+        return self._state(), reward, game_over
+    
+    def _render(self):
+        self.screen.fill(BLACK)
+        for x, y in self.snake:
+            pygame.draw.rect(self.screen, GREEN, (y * CELL_SIZE, x * CELL_SIZE, CELL_SIZE, CELL_SIZE))
+
+        fx, fy = self.food
+        pygame.draw.rect(self.screen, RED, (fy * CELL_SIZE, fx * CELL_SIZE, CELL_SIZE, CELL_SIZE))
+
+        pygame.display.flip()
+        self.clock.tick(FPS)
