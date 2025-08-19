@@ -1,5 +1,6 @@
 import pygame
 import random
+import numpy as np
 
 pygame.init()
 
@@ -22,6 +23,7 @@ class SnakeGame:
 
     def reset(self):
         self.snake = [(GRID_SIZE//2, GRID_SIZE//2)]
+        self.score = 0
         self.direction = RIGHT
         self.food = self._place_food()
 
@@ -31,3 +33,65 @@ class SnakeGame:
 
             if food not in self.snake:
                 return food
+            
+    def _state(self):
+        """
+        state: [danger_up, danger_right, danger_down, danger_left, 
+                 food_up, food_right, food_down, food_left,
+                 direction_up, direction_right, direction_down, direction_left,
+                 snake_length]
+        """
+        head_x, head_y = self.snake[0]
+        food_x, food_y = self.food
+        state = [0]*13
+
+        # dangerous or not in a direction of snake head
+        for i, (dx, dy) in enumerate([(-1,0),(0,1),(1,0),(0,-1)]):
+            next_x = (head_x+dx) % GRID_SIZE
+            next_y = (head_y+dy) % GRID_SIZE
+            if (next_x, next_y) in self.snake[1:]:
+                state[i] = 1
+
+        # food is or is not in a direction of snake head
+        state[4] = 1 if food_x < head_x else 0
+        state[5] = 1 if food_y > head_y else 0
+        state[6] = 1 if food_x > head_x else 0
+        state[7] = 1 if food_y < head_y else 0
+
+        # current direction
+        state[8 + self.direction] = 1
+
+        # curent length
+        state[12] = len(self.snake) / GRID_SIZE
+        
+        return np.array(state, dtype=np.float32)
+            
+    def step(self, action):
+        # 3 actions prevent agent reversing directions
+        if action == 0:
+            pass
+        elif action == 1:
+            self.direction = (self.direction + 1) % 4
+        elif action == 2:
+            self.direction = (self.direction - 1) % 4
+
+        head_x, head_y = self.snake[0]
+        if self.direction == UP:
+            head_x -= 1
+        elif self.direction == RIGHT:
+            head_y += 1
+        elif self.direction == DOWN:
+            head_x += 1
+        elif self.direction == LEFT:
+            head_y -= 1
+
+        head_x %= GRID_SIZE
+        head_y %= GRID_SIZE
+        new_head = (head_x, head_y)
+
+        if new_head in self.snake[1:]:
+            return self._get_state(), -1 + 0.1 * len(self.snake), True
+        
+        self.snake.insert(0, new_head)
+
+        reward = -0.01
