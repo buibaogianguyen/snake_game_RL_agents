@@ -108,7 +108,7 @@ class SnakeGame:
 
         reward = -0.01
 
-        game_over = False
+        ep_done = False
 
         if new_head == self.food:
             self.score += 1
@@ -117,7 +117,7 @@ class SnakeGame:
         else:
             self.snake.pop()
         
-        return self._state(), reward, game_over
+        return self._state(), reward, ep_done
     
     def _render(self):
         self.screen.fill(BLACK)
