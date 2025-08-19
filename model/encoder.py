@@ -15,5 +15,5 @@ class Encoder:
         return model
     
     def predict(self,state):
-        return self.model.predict(state, verbose=1)
+        return self.model.predict(state, verbose=0)
     

@@ -37,7 +37,7 @@ class SnakeGame:
         self.direction = RIGHT
         self.food = self._place_food()
         
-        return self._get_state()
+        return self._state()
 
     def _place_food(self):
         while True:
