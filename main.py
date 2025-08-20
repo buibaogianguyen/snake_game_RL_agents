@@ -24,7 +24,10 @@ def main():
             next_state, reward, done = game.step(action)
 
             agent.store_exp(state, action, reward, next_state, done, probs)
-            agent.train()
+            if len(agent.memory) >= agent.batch_size:
+                agent.train()
+
+            game._render()
 
             state = next_state
 

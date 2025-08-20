@@ -27,7 +27,7 @@ class SnakeGame:
         self.render = render
         if self.render:
             self.screen = pygame.display.set_mode((GRID_WIDTH, GRID_HEIGHT))
-            pygame.display.set_caption('Snake Dreamer')
+            pygame.display.set_caption('Snake PPO')
             self.clock = pygame.time.Clock()
         self.reset()
 
@@ -97,18 +97,27 @@ class SnakeGame:
         elif self.direction == LEFT:
             head_y -= 1
 
+        prev_dist = abs(head_x - self.food[0]) + abs(head_y - self.food[1])
+
         head_x %= GRID_SIZE
         head_y %= GRID_SIZE
         new_head = (head_x, head_y)
 
+        new_dist = abs(head_x - self.food[0]) + abs(head_y - self.food[1])
+
         if new_head in self.snake[1:]:
-            return self._get_state(), -1 + 0.1 * len(self.snake), True
+            return self._state(), -(1 + 0.1 * len(self.snake)), True
         
         self.snake.insert(0, new_head)
 
         reward = -0.01
 
         ep_done = False
+
+        if new_dist < prev_dist:
+            reward += 0.1
+        elif new_dist > prev_dist:
+            reward -= 0.1
 
         if new_head == self.food:
             self.score += 1
