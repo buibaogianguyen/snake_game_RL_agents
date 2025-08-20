@@ -19,10 +19,10 @@ class PPOAgent:
         self.gamma = 0.99
         
     def get_action(self, state):
-        prob = self.actor(state)
-        action = np.random.choice(self.action_size, p=prob)
+        probs = self.actor(state)
+        action = np.random.choice(self.action_size, p=probs)
         
-        return prob, action
+        return probs, action
     
     def store_exp(self, state, action, reward, next_state, done, prob):
         self.memory.append(state, action, reward, next_state, done, prob)
