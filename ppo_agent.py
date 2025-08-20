@@ -1,6 +1,6 @@
 import tensorflow as tf
-from .model.actor import Actor
-from .model.critic import Critic
+from model.actor import Actor
+from model.critic import Critic
 import numpy as np
 from collections import deque
 import random
@@ -19,7 +19,8 @@ class PPOAgent:
         self.gamma = 0.99
         
     def get_action(self, state):
-        probs = self.actor(state)
+        state = np.expand_dims(state, axis=0)
+        probs = self.actor.predict(state)[0]
         action = np.random.choice(self.action_size, p=probs)
         
         return probs, action
