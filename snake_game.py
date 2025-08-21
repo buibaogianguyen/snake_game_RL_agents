@@ -27,7 +27,7 @@ class SnakeGame:
         self.render = render
         if self.render:
             self.screen = pygame.display.set_mode((GRID_WIDTH, GRID_HEIGHT))
-            pygame.display.set_caption('Snake PPO')
+            pygame.display.set_caption('Snake')
             self.clock = pygame.time.Clock()
         self.reset()
 
@@ -106,11 +106,11 @@ class SnakeGame:
         new_dist = abs(head_x - self.food[0]) + abs(head_y - self.food[1])
 
         if new_head in self.snake[1:]:
-            return self._state(), -(1 + 0.1 * len(self.snake)), True
+            return self._state(), -(10 + 0.1 * len(self.snake)), True
         
         self.snake.insert(0, new_head)
 
-        reward = -0.01
+        reward = -0.1
 
         ep_done = False
 
