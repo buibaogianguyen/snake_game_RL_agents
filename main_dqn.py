@@ -3,6 +3,7 @@ from dqn_agent import DQNAgent
 import numpy as np
 import time
 import pygame
+import os
 
 FPS = 10
 
@@ -10,7 +11,8 @@ def main(render):
     game = SnakeGame(render=render)
     agent = DQNAgent()
 
-    agent.load('dqn_model.h5')
+    if os.path.exists('dqn_model.h5'):
+        agent.load('dqn_model.h5')
 
     episodes = 1000
 

@@ -3,6 +3,7 @@ from ppo_agent import PPOAgent
 import numpy as np
 import time
 import pygame
+import os
 
 FPS = 10
 
@@ -10,8 +11,9 @@ def main(render):
     game = SnakeGame(render=render)
     agent = PPOAgent()
 
-    agent.actor.model = agent.load("ppo_actor.h5")
-    agent.critic.model = agent.load("ppo_critic.h5")
+    if os.path.exists('dqn_model.h5'):
+        agent.actor.model = agent.load("ppo_actor.h5")
+        agent.critic.model = agent.load("ppo_critic.h5")
 
     episodes = 1000
 
