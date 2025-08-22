@@ -60,6 +60,12 @@ class DQNAgent:
 
         if self.eps > self.eps_min:
             self.eps *= self.eps_decay
+        
+    def save(self, filepath):
+        self.model.save(filepath)
+
+    def load(self, filepath):
+        self.model = tf.keras.models.load_model(filepath)
     
 
 

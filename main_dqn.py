@@ -10,6 +10,8 @@ def main(render):
     game = SnakeGame(render=render)
     agent = DQNAgent()
 
+    agent.load('dqn_model.h5')
+
     episodes = 1000
 
     scores = []
@@ -37,6 +39,8 @@ def main(render):
         
         if episode % 100 == 0:
             print(f"Episode: {episode}\nAverage Score: {np.mean(scores[-100:])}")
+
+    agent.save('dqn_model.h5')
 
     state = game.reset()
     done = False

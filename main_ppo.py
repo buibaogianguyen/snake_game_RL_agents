@@ -10,6 +10,9 @@ def main(render):
     game = SnakeGame(render=render)
     agent = PPOAgent()
 
+    agent.actor.model = agent.load("ppo_actor.h5")
+    agent.critic.model = agent.load("ppo_critic.h5")
+
     episodes = 1000
 
     scores = []
@@ -38,6 +41,9 @@ def main(render):
         
         if episode % 100 == 0:
             print(f"Episode: {episode}\nAverage Score: {np.mean(scores[-100:])}")
+        
+    agent.actor.model.save("ppo_actor.h5")
+    agent.critic.model.save("ppo_critic.h5")
 
     state = game.reset()
     done = False

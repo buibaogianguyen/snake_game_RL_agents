@@ -80,3 +80,9 @@ class PPOAgent:
 
         critic_grads = tape.gradient(critic_loss, self.critic.model.trainable_variables)
         self.critic_optim.apply_gradients(zip(critic_grads, self.critic.model.trainable_variables))
+
+    def save(self, filepath):
+        self.model.save(filepath)
+
+    def load(self, filepath):
+        self.model = tf.keras.models.load_model(filepath)
