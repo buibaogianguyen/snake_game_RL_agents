@@ -1,6 +1,6 @@
 # DQN and PPO agents on Snake Game
 
-This project implements two reinforcement learning models - Deep-Q Network (DQN) and Proximal Policy Optimization (PPO) - to be trained on the classic Snake Game with 10x10 playable grids and rounded edges with TensorFlow.
+This project implements two reinforcement learning agents - Deep-Q Network (DQN) and Proximal Policy Optimization (PPO) - to be trained on the classic Snake Game with 10x10 playable grids and rounded edges with TensorFlow.
 
 5 Minute Demo of the DQN Agent's training
 
